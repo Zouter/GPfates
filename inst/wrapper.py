@@ -1,38 +1,42 @@
-import PyGPfates
-import json
+import pandas as pd
+import numpy as np
+
+from GPfates import GPfates
+
 import sys
-import numpy
 
 temp_folder = sys.argv[1]
-rigorous_gap_stats = bool(sys.argv[3].capitalize())
-N_dim = int(sys.argv[4])
-low_gene_threshold = float(sys.argv[5])
-low_gene_fraction_max = float(sys.argv[6])
-min_split = int(sys.argv[7])
-min_percentage_split = float(sys.argv[8])
+log_expression_cutoff = float(sys.argv[2])
+min_cells_expression_cutoff = float(sys.argv[3])
+nfates = int(sys.argv[4])
+ndims = int(sys.argv[5])
 
+etpm = pd.read_table(temp_folder + 'expression.csv', index_col=0)
+etpm = etpm[(etpm > log_expression_cutoff).sum(1) >min_cells_expression_cutoff]
+logexp = np.log10(etpm + 1)
 
-cell_IDs, data, markers, cell_stages, data_tag, output_directory = PyGPfates.Preprocessing.RNASeq_preprocess(temp_folder + "/counts.tsv", pseudotime_mode=True, log_mode=False, N_dim=N_dim, low_gene_threshold=low_gene_threshold, low_gene_fraction_max=low_gene_fraction_max)
-centroid_coordinates, cluster_indices, parent_clusters = PyGPfates.initialize_tree(data, cell_stages, rigorous_gap_stats=rigorous_gap_stats, min_split=min_split, min_percentage_split=min_percentage_split)
-centroid_coordinates, cluster_indices, parent_clusters, new_tree = PyGPfates.refine_tree(data, centroid_coordinates, cluster_indices, parent_clusters, cell_stages, output_directory=temp_folder)
+cellinfo = pd.read_table(temp_folder + 'cellinfo.csv', index_col=0)
 
-class MyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, numpy.integer):
-            return int(obj)
-        elif isinstance(obj, numpy.floating):
-            return float(obj)
-        elif isinstance(obj, numpy.ndarray):
-            return obj.tolist()
-        else:
-            return super(MyEncoder, self).default(obj)
+m = GPfates.GPfates(cellinfo, logexp)
 
+print("Dimensionality reduction--------------------------------------")
+m.dimensionality_reduction()
 
-json.dump({
-        "tree":parent_clusters,
-        "labels":cluster_indices.tolist(),
-        "new_tree":new_tree
-    },
-          open(temp_folder + "/output.json", "w")
-, cls=MyEncoder
- )
+print("Story DR------------------------------------------------------")
+m.store_dr(dims=range(ndims)) # store the dr in the sample table (m.s), so it can be used in the gplvm
+
+print("Infer pseudotime----------------------------------------------")
+m.infer_pseudotime(s_columns=['bgplvm_' + str(i) for i in range(ndims)]) # use the first two components to infer pseudotime
+
+print("Model cell fates----------------------------------------------")
+m.model_fates(C=nfates)
+
+print("Saving--------------------------------------------------------")
+m.s.pseudotime.to_csv(temp_folder + "pseudotimes.csv")
+pd.DataFrame(m.fate_model.phi, index=m.s.pseudotime.index).to_csv(temp_folder + "phi.csv")
+
+dr = m.dr_models["bgplvm"]
+dr2 = dr.X.mean[:, :]
+pd.DataFrame(dr2.tolist(), index=m.s.pseudotime.index).to_csv(temp_folder + "dr.csv")
+
+print("Finished------------------------------------------------------")
