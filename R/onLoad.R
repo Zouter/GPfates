@@ -5,6 +5,7 @@
   }
 }
 
+#' Reinstall GPfates
 #' @export
 #' @importFrom glue glue
 reinstall <- function() {
