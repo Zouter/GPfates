@@ -10,7 +10,13 @@
 #' @importFrom glue glue
 #' @importFrom readr read_csv
 #' @importFrom utils write.table
-GPfates <- function(counts, nfates, ndims, log_expression_cutoff, min_cells_expression_cutoff) {
+GPfates <- function(
+  counts,
+  nfates = 1,
+  ndims = 2,
+  log_expression_cutoff = 2,
+  min_cells_expression_cutoff = 2
+) {
   temp_folder <- tempdir()
 
   utils::write.table(t(counts), paste0(temp_folder, "expression.csv"), sep="\t")
@@ -38,6 +44,9 @@ GPfates <- function(counts, nfates, ndims, log_expression_cutoff, min_cells_expr
   phi <- readr::read_csv(glue::glue("{temp_folder}phi.csv"), col_names = c("cell_id", glue::glue("M{seq_len(nfates)}")), skip = 1)
 
   dr <- readr::read_csv(glue::glue("{temp_folder}dr.csv"), col_names = c("cell_id", glue::glue("Comp{seq_len(5)}")), skip = 1)
+
+  # remove temporary output
+  unlink(temp_folder, recursive = TRUE)
 
   list(
     pseudotime = pseudotime,

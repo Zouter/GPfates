@@ -4,8 +4,8 @@
 \alias{GPfates}
 \title{Run GPfates}
 \usage{
-GPfates(counts, nfates, ndims, log_expression_cutoff,
-  min_cells_expression_cutoff)
+GPfates(counts, nfates = 1, ndims = 2, log_expression_cutoff = 2,
+  min_cells_expression_cutoff = 2)
 }
 \arguments{
 \item{counts}{The non-normalised expression counts}
