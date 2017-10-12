@@ -25,7 +25,7 @@ print("Story DR------------------------------------------------------")
 m.store_dr(dims=range(p["ndims"])) # store the dr in the sample table (m.s), so it can be used in the gplvm
 
 print("Infer pseudotime----------------------------------------------")
-m.infer_pseudotime(s_columns=["bgplvm_" + str(i) for i in range(ndims)]) # use the first two components to infer pseudotime
+m.infer_pseudotime(s_columns=["bgplvm_" + str(i) for i in range(p["ndims"])]) # use the first two components to infer pseudotime
 
 print("Model cell fates----------------------------------------------")
 m.model_fates(C=p["nfates"])
