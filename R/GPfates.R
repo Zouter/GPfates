@@ -12,6 +12,7 @@
 #' @importFrom readr read_csv
 #' @importFrom utils write.table
 #' @importFrom methods formalArgs
+#' @importFrom jsonlite toJSON
 GPfates <- function(
   counts,
   nfates = 1,
