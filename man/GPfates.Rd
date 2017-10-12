@@ -5,7 +5,7 @@
 \title{Run GPfates}
 \usage{
 GPfates(counts, nfates = 1, ndims = 2, log_expression_cutoff = 2,
-  min_cells_expression_cutoff = 2)
+  min_cells_expression_cutoff = 2, verbose = FALSE)
 }
 \arguments{
 \item{counts}{The non-normalised expression counts}
@@ -17,6 +17,8 @@ GPfates(counts, nfates = 1, ndims = 2, log_expression_cutoff = 2,
 \item{log_expression_cutoff}{The log expression cutoff}
 
 \item{min_cells_expression_cutoff}{The min expression cutoff}
+
+\item{verbose}{Print output produced by method}
 }
 \description{
 Run GPfates
