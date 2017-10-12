@@ -11,6 +11,7 @@
 #' @importFrom glue glue
 #' @importFrom readr read_csv
 #' @importFrom utils write.table
+#' @importFrom methods formalArgs
 GPfates <- function(
   counts,
   nfates = 1,
@@ -31,7 +32,7 @@ GPfates <- function(
   utils::write.table(cell_info, paste0(temp_folder, "/cellinfo.tsv"), sep="\t")
 
   # write parameters to temporary folder
-  params <- as.list(environment())[formalArgs(GPfates)]
+  params <- as.list(environment())[methods::formalArgs(GPfates)]
   params <- params[names(params) != "counts"]
   write(jsonlite::toJSON(params, auto_unbox = TRUE), paste0(temp_folder, "/params.json"))
 

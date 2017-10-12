@@ -3,5 +3,6 @@
 export(GPfates)
 export(reinstall)
 importFrom(glue,glue)
+importFrom(methods,formalArgs)
 importFrom(readr,read_csv)
 importFrom(utils,write.table)
