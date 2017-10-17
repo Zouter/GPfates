@@ -4,8 +4,7 @@ import json
 import sys
 from GPfates import GPfates
 
-# temp_folder = sys.argv[1]
-temp_folder = "/tmp/Rtmp6m5CIn/file23716f165ca0"
+temp_folder = sys.argv[1]
 
 # Load params
 p = json.load(open(temp_folder + "/params.json", "r"))
