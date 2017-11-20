@@ -21,7 +21,7 @@ m = GPfates.GPfates(cellinfo, logexp)
 print("Dimensionality reduction--------------------------------------")
 m.dimensionality_reduction()
 
-print("Story DR------------------------------------------------------")
+print("Store DR------------------------------------------------------")
 m.store_dr(dims=range(p["ndims"])) # store the dr in the sample table (m.s), so it can be used in the gplvm
 
 print("Infer pseudotime----------------------------------------------")
