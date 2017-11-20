@@ -11,4 +11,4 @@ addons:
       - python3-setuptools
       - python3-wheel
 install:
- - "pip3 install --upgrade "numpy pandas matplotlib tqdm GPy"
+ - "pip3 install --upgrade numpy pandas matplotlib tqdm GPy"
