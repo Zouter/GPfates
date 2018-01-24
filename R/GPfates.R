@@ -49,25 +49,22 @@ GPfates <- function(
       num_cores_str <- glue::glue(
         "export MKL_NUM_THREADS={num_cores};",
         "export NUMEXPR_NUM_THREADS={num_cores};",
-        "export OMP_NUM_THREADS={num_cores};"
+        "export OMP_NUM_THREADS={num_cores}"
       )
     } else {
-      num_cores_str <- ""
+      num_cores_str <- "echo 'no cores'"
     }
-    output <- system2(
-      "/bin/bash",
-      args = c(
-        "-c",
-        shQuote(glue::glue(
-          "cd {find.package('GPfates')}/venv;",
-          "source bin/activate;",
-          "{num_cores_str}",
-          "python3 {find.package('GPfates')}/wrapper.py {temp_folder}"
-        ))
-      )
-    )
 
-    if (verbose) cat(output, "\n", sep="")
+    commands <- glue::glue(
+      "cd {find.package('GPfates')}/venv",
+      "source bin/activate",
+      "{num_cores_str}",
+      "python3 {find.package('GPfates')}/wrapper.py {temp_folder}",
+      .sep = ";"
+    )
+    output <- dynutils::run_until_exit(commands)
+
+    if (verbose) cat(output$output, "\n", sep="")
 
     # read output
     pseudotime <- readr::read_csv(
