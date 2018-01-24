@@ -14,6 +14,7 @@
 #' @importFrom utils write.table
 #' @importFrom methods formalArgs
 #' @importFrom jsonlite toJSON
+#' @importFrom dynutils run_until_exit
 GPfates <- function(
   counts,
   nfates = 1,
