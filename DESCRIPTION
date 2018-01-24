@@ -16,3 +16,5 @@ Imports:
   readr,
   utils,
   dynutils
+Remotes:
+  rcannood/dynutils,
