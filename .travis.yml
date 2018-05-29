@@ -2,24 +2,25 @@ language: r
 sudo: required
 dist: trusty
 bioc_required: true
-cache: packages
+cache:
+  timeout: 2000
+  apt: true
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/R/Library
 warnings_are_errors: true
 python:
   - "3.6"
-env:
-  - R_MAX_NUM_DLLS=250
 addons:
   apt:
     packages:
       - libblas-dev
       - liblapack-dev
 before_install:
-  - sudo apt-get -y install python3-pip
-  - sudo pip3 install --upgrade pip setuptools wheel
-  - python3 -V
-  - pip3 -V
+ - source <( curl --insecure https://raw.githubusercontent.com/dynverse/dynmethods/master/.travis_install_python.sh ) # use travis's own python
 install:
-  - sudo pip3 install --upgrade --only-binary=numpy,scipy numpy scipy
+  - pip3 install --user --upgrade --only-binary=numpy,scipy numpy scipy
+  - pip3 install --user --upgrade matplotlib tqdm GPy
   - R -e 'install.packages("devtools")'
   - R -e 'setRepositories(ind = 1:2)'
   - R -e 'devtools::install(dependencies = T, upgrade = T)'
