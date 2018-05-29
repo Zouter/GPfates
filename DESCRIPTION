@@ -14,7 +14,4 @@ Imports:
   jsonlite,
   methods,
   readr,
-  utils,
-  dynutils
-Remotes:
-  rcannood/dynutils
+  utils
