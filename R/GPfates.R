@@ -63,7 +63,8 @@ GPfates <- function(
       "python3 {find.package('GPfates')}/wrapper.py {temp_folder}",
       .sep = ";"
     )
-    output <- dynutils::run_until_exit(commands)
+
+    output <- processx::run("/bin/bash", c("-c", commands), echo=TRUE)
 
     if (verbose) cat(output$output, "\n", sep="")
 
