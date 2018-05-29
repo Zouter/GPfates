@@ -14,4 +14,5 @@ Imports:
   jsonlite,
   methods,
   readr,
-  utils
+  utils,
+  processx
